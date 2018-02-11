@@ -6,6 +6,19 @@ from unidecode import unidecode
 import logging
 import numpy as np
 
+# Python 2 and 3: backward-compatible
+from past.builtins import xrange
+
+
+# Python 2 and 3: option 3
+#from future.utils import iteritems as itritems
+# or
+
+#from six import iteritems 
+
+
+
+
 PUNCTUATIONS = "'""-,.!?:;"
 ACCENTS = u'ãõçâêôáíóúàüóé'
 
@@ -90,9 +103,17 @@ class CharParser(BaseParser):
             text = unidecode(text)
 
         if not('p' in self.mode):
-            text = text.translate(
-                string.maketrans("-'", '  ')).translate(None,
+            try:
+                text = text.translate(
+                    string.maketrans("-'", '  ')).translate(None,
                                                         string.punctuation)
+            except:
+                
+                trantab = str.maketrans("-'",'  ')
+                text = text.translate(trantab)
+                translator = str.maketrans('', '', string.punctuation)
+                text = text.translate(translator)
+                
 
         if not ('s' in self.mode):
             text = text.replace(' ', '')
@@ -135,7 +156,7 @@ class CharParser(BaseParser):
             for num in range(10):
                 vocab[str(num)] = len(vocab)
 
-        inv_vocab = {v: k for (k, v) in vocab.iteritems()}
+        inv_vocab = {v: k for (k, v) in vocab.items()}
 
         # Add blank label
         inv_vocab[len(inv_vocab)] = '<b>'

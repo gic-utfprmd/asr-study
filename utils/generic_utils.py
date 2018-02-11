@@ -33,7 +33,7 @@ def safe_mkdirs(path):
     '''
     try:
         os.makedirs(path)
-    except OSError, e:
+    except OSError as e:
         if e.errno != 17:  # 17 = file exists
             raise
 
@@ -57,7 +57,7 @@ def get_from_module(module, name, params=None, regex=False):
             return member(**HParams().parse(params).values())
 
         return member
-    except KeyError, e:
+    except KeyError as e:
         raise KeyError("%s not found in %s.\n Valid values are: %s" %
                        (name, module, ', '.join(members.keys())))
 

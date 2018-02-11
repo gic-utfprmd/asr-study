@@ -193,6 +193,7 @@ if __name__ == '__main__':
     num_val_samples = num_test_samples = 0
 
     logger.info('Generating flow...')
+    
     if len(args.dataset) == 1:
         train_flow, valid_flow, test_flow = data_gen.flow_from_fname(
             args.dataset[0], datasets=['train', 'valid', 'test'])

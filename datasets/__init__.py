@@ -13,3 +13,8 @@ from datasets.voxforge import VoxForge
 from datasets.cslu import CSLU
 from datasets.dummy import Dummy
 from datasets.brsd import BRSD
+#English datasets
+from datasets.cvc import CVC
+from datasets.ensd import ENSD
+
+

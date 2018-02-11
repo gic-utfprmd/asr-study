@@ -13,6 +13,9 @@ import logging
 from scipy import signal
 from scipy.fftpack import dct
 import librosa
+# Python 2 and 3: backward-compatible
+from past.builtins import xrange
+
 
 
 class Feature(object):
@@ -29,6 +32,7 @@ class Feature(object):
                  mean_norm=True, var_norm=True):
         self.fs = fs
         self.eps = eps
+        
 
         self.mean_norm = mean_norm
         self.var_norm = var_norm
@@ -80,11 +84,11 @@ class Feature(object):
 
         # We only keep every second feature (BiRNN stride = 2)
         feats = feats[::self.stride]
-
+        
         if self.num_context == 0:
             return feats
         num_feats = feats.shape[1]
-
+        
         train_inputs = np.array([], np.float32)
         train_inputs.resize((feats.shape[0],
                             num_feats + 2*num_feats*self.num_context))
@@ -187,6 +191,7 @@ class FBank(Feature):
             raise ValueError("high_freq must be less or equal than fs/2")
 
         self.win_len = win_len
+        
         self.win_step = win_step
         self.num_filt = num_filt
         self.nfft = nfft

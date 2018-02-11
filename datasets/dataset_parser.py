@@ -133,10 +133,16 @@ class DatasetParser(object):
 
                 if input_parser.num_feats:
                     inputs.attrs['num_feats'] = input_parser.num_feats
-
-                group.create_dataset(
-                    'labels', (0,), maxshape=(None,),
-                    dtype=h5py.special_dtype(vlen=unicode))
+                try:
+                    
+                    group.create_dataset(
+                        'labels', (0,), maxshape=(None,),
+                        dtype=h5py.special_dtype(vlen=unicode))
+                except:
+                    group.create_dataset(
+                        'labels', (0,), maxshape=(None,),
+                        dtype=h5py.special_dtype(vlen=str))
+                    
 
                 group.create_dataset(
                     'durations', (0,), maxshape=(None,))

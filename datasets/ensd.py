@@ -3,21 +3,18 @@ from __future__ import division
 from __future__ import print_function
 
 from datasets import DatasetParser
-from datasets import LapsBM
+from datasets import CVC
 
 from utils.generic_utils import get_from_module
 
+class ENSD(DatasetParser):
+    """ English Speech dataset reader and parser
 
-class BRSD(DatasetParser):
-    """ Brazilian Portuguese Speech dataset reader and parser
-
-    This dataset is a combination of four smaller datasets (voxforge, lapsbm,
-    sid, and cslu spoltech port). The dataset was divided in the following
+    This dataset is a combination of four biggers datasets (voxforge, CommonVoice). The dataset was divided in the following
     way:
-        * Train: voxforge, sid, and cslu spoltech port
-        * Valid: 5 women and 15 men from LaspBM
-        * Test: 5 women 10 men from LapsBM (without overlapping with valid set
-        either in speaker and utterance spoken)
+        * Train: voxforge,CommonVoice
+        * Valid: Common Voice valid test( cv-valid-test )
+        * Test: Common Voice valid test( cv-other-test.csv )
 
     After cleaning (removing label with zero length, label with numeric
     digits, e.g., 4 instead of four) the training set contains 11702
@@ -25,14 +22,12 @@ class BRSD(DatasetParser):
 
     """
 
-    def __init__(self, dataset_dir=None, name='brsd', **kwargs):
+    def __init__(self, dataset_dir=None, name='ensd', **kwargs):
 
-        dataset_dir = dataset_dir or {'lapsbm': None,
-                                      'voxforge': None,
-                                      'sid': None,
-                                      'cslu': None}
+        dataset_dir = dataset_dir or {'cv_corpus_v1': None,
+                                      'voxforge': None}
 
-        super(BRSD, self).__init__(dataset_dir, name, **kwargs)
+        super(ENSD, self).__init__(dataset_dir, name, **kwargs)
 
     @property
     def dataset_dir(self):
@@ -50,12 +45,12 @@ class BRSD(DatasetParser):
         if not isinstance(value, dict):
             raise ValueError("dataset_dir must be a dictionary")
 
-        for key in ('lapsbm', 'voxforge', 'sid'):
+        for key in ('cv_corpus_v1', 'voxforge'):
             if key not in value:
                 raise KeyError("dataset_dir must have the key %s" % key)
 
-        if 'cslu' not in value:
-            self._logger.warning('CSLU not found. Ignoring it.')
+        '''if 'cslu' not in value:
+            self._logger.warning('CSLU not found. Ignoring it.')'''
 
         self._dataset_dir = value
 
@@ -63,7 +58,7 @@ class BRSD(DatasetParser):
 
         for name, path in self.dataset_dir.items():
 
-            if name == 'lapsbm':
+            if name == 'cv_corpus_v1':
                 continue
 
             try:
@@ -76,23 +71,23 @@ class BRSD(DatasetParser):
                            'label': d['label'],
                            'speaker': '%s_%s' % (str(dataset), d['speaker']),
                            'dataset': 'train'}
-            except ValueError as  e:
+            except ValueError as e:
                 self._logger.warning('Skipping dataset %s: %s' % (name, e))
+
         # Test and valid set
-        lapsbm = LapsBM(dataset_dir=self.dataset_dir['lapsbm'], split=True)
-        for d in lapsbm._iter():
+        cvc = CVC(dataset_dir=self.dataset_dir['cv_corpus_v1'])
+        for d in cvc._iter():
             yield {'duration': d['duration'],
                    'input': d['input'],
                    'label': d['label'],
-                   'speaker': '%s_%s' % (str(dataset), d['speaker']),
+                   'audio_file': d['audio_file'],
                    'dataset': d['dataset']}
 
     def _report(self, dl):
         report = '''General information:
            Number of utterances: %d
            Total size (in seconds) of utterances: %.f
-           Number of speakers: %d''' % (len(dl['input']),
-                                        sum(dl['duration']),
-                                        len(set(dl['speaker'])))
+           ''' % (len(dl['input']),sum(dl['duration']))
+
 
         return report
