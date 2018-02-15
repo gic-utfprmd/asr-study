@@ -326,7 +326,7 @@ class MFCC(FBank):
         performs the cepstral mean and variance normalizastion. Default 'cmn'
     """
 
-    def __init__(self, num_cep=13, cep_lifter=22, append_energy=True,
+    def __init__(self, num_cep=14, cep_lifter=22, append_energy=True,
                  d=True, dd=True, **kwargs):
 
         super(MFCC, self).__init__(**kwargs)
