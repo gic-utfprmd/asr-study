@@ -149,6 +149,7 @@ if __name__ == '__main__':
         output_dir = os.path.join('results',
                                   '%s_%s' % (args.model,
                                              datetime.datetime.now()))
+    output_dir=output_dir.replace('.','-').replace(':','-')#windows directory support
     if not os.path.isdir(output_dir):
         os.makedirs(output_dir)
 
