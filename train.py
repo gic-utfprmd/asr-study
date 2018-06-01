@@ -14,6 +14,8 @@ import datetime
 import inspect
 import codecs
 
+import time
+
 import logging
 try:
     import warpctc_tensorflow
@@ -43,6 +45,8 @@ from utils.core_utils import load_model
 
 if __name__ == '__main__':
 
+    arq = open('Experimentos-Results.txt', 'a')
+    
     parser = argparse.ArgumentParser(description='Training an ASR system.')
 
     # Resume training
@@ -211,13 +215,14 @@ if __name__ == '__main__':
     logger.info(str(vars(args)))
     print(str(vars(args)))
     logger.info('Initialzing training...')
+    start_time = time.time()
     # Fit the model
     model.fit_generator(train_flow, samples_per_epoch=train_flow.len,
                         nb_epoch=args.num_epochs, validation_data=valid_flow,
                         nb_val_samples=num_val_samples, max_q_size=10,
                         nb_worker=1, callbacks=callback_list, verbose=1,
                         initial_epoch=epoch_offset)
-
+    end_time=time.time() - start_time
     if test_flow:
         del model
         model = load_model(os.path.join(output_dir, 'best.h5'), mode='eval')
@@ -228,7 +233,8 @@ if __name__ == '__main__':
         msg = 'Total loss: %.4f\n\
 CTC Loss: %.4f\nLER: %.2f%%' % (metrics[0], metrics[1], metrics[3]*100)
         logger.info(msg)
-
+        print("Modelo:",args.model," Model_Params: ",args.model_params, "Batch_size: ",args.batch_size," Num_Epochs: ",args.num_epochs," Run time: ",end_time,file=arq)
+        print(msg,file=arq)
         with open(os.path.join(output_dir, 'results.txt'), 'w') as f:
             f.write(msg)
 
