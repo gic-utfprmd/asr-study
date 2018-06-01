@@ -12,7 +12,7 @@ from keras.activations import relu
 
 from keras.models import Model
 
-from keras.layers import Input,GRU, ZeroPadding1D, Convolution1D, ZeroPadding2D, Convolution2D, MaxPooling2D, GlobalMaxPooling2D
+from keras.layers import Input,GRU, ZeroPadding1D, Convolution1D,BatchNormalization,ZeroPadding2D, Convolution2D, MaxPooling2D, GlobalMaxPooling2D,Conv1D,Conv2D
 from keras.layers import GaussianNoise
 from keras.layers import TimeDistributed
 from keras.layers import Dense
