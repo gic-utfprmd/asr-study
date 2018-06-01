@@ -317,7 +317,7 @@ def deep_speech2(num_features=161, num_hiddens=1024, rnn_size=512,max_value=30, 
         for l in range(conv_layers):
             x = TimeDistributed(Dense(num_hiddens, name='fc_{}'.format(l + 1), activation='relu'))(x)  
 
-    x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3, center=True, scale=True)(x)
+    x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3)(x)
 
     for l in range(gru_layers):
         x = Bidirectional(GRU(rnn_size, name='fc_{}'.format(l + 1), return_sequences=True, activation='relu', kernel_initializer=initialization),
