@@ -216,7 +216,7 @@ class DatasetIterator(Iterator):
         # if label is not provided output is not necessary
         if batch_labels is None:
             return [batch_inputs, batch_inputs_len]
-        
+
         return ([batch_inputs, batch_labels, batch_inputs_len],
                 [np.zeros((batch_inputs.shape[0],)), batch_labels])
 
@@ -233,6 +233,8 @@ class DatasetIterator(Iterator):
 
         batch_inputs_len = np.asarray([i.shape[0] for i in inputs])
         return batch_inputs, batch_inputs_len
+
+        
 
     def _make_out(self, labels, batch_size=None):
         if self.labels is None or self.mode == 'predict':
