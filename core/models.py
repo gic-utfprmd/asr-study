@@ -307,7 +307,7 @@ def deep_speech2(num_features=161, num_hiddens=1024, rnn_size=512,max_value=30, 
     K.set_learning_phase(1)
 
     input_data = Input(shape=(None, num_features), name='the_input')
-    x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3, center=True, scale=True)(input_data)
+    x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3)(input_data)
 
     if use_conv:
         conv = ZeroPadding1D(padding=(0, 2048))(x)
@@ -323,7 +323,7 @@ def deep_speech2(num_features=161, num_hiddens=1024, rnn_size=512,max_value=30, 
         x = Bidirectional(GRU(rnn_size, name='fc_{}'.format(l + 1), return_sequences=True, activation='relu', kernel_initializer=initialization),
                       merge_mode='sum')(x)
 
-    x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3, center=True, scale=True)(x)
+    x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3)(x)
                                             
     # Last Layer 5+6 Time Dist Dense Layer & Softmax
     x = TimeDistributed(Dense(num_hiddens, activation=clipped_relu))(x)
