@@ -312,7 +312,7 @@ def deep_speech2(num_features=161, num_hiddens=1024, rnn_size=512,max_value=30, 
     
     print_out = Lambda(lambda y:  tf.Print(y, [tf.shape(y)]))(x)
     if use_conv:
-        #conv = ZeroPadding1D(padding=(0, 2048))(print_out)
+        conv = ZeroPadding1D(padding=(0, 1048))(print_out)
         #print_out = Lambda(lambda y:  tf.Print(y, [tf.shape(y)]))(conv)
         conv = print_out
         for l in range(conv_layers):
