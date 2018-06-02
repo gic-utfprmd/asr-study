@@ -308,9 +308,9 @@ def deep_speech2(num_features=161, num_hiddens=1024, rnn_size=512,max_value=30, 
 
     input_data = Input(shape=(None, num_features), name='the_input')
     x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3)(input_data)
-
+    print_out = tf.Print(x, [tf.shape(x)])
     if use_conv:
-        conv = ZeroPadding1D(padding=(0, 2048))(x)
+        conv = ZeroPadding1D(padding=(0, 2048))(print_out)
         for l in range(conv_layers):
             x = Conv1D(nb_filter=num_hiddens, name='conv_{}'.format(l+1), filter_length=11, border_mode='valid', activation='relu', subsample_length=2)(conv)
     else:
