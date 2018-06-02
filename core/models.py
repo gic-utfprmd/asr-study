@@ -5,6 +5,7 @@ from __future__ import print_function
 import core.ctc_utils as ctc_utils
 from utils.hparams import HParams
 
+import tensorflow as tf
 import keras
 import keras.backend as K
 from keras.initializations import uniform
