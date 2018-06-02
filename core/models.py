@@ -316,7 +316,7 @@ def deep_speech2(num_features=161, num_hiddens=1024, rnn_size=512,max_value=30, 
             x = Conv1D(nb_filter=num_hiddens, name='conv_{}'.format(l+1), filter_length=11, border_mode='valid', activation='relu', subsample_length=2)(conv)
     else:
         for l in range(conv_layers):
-            x = TimeDistributed(Dense(num_hiddens, name='fc_{}'.format(l + 1), activation='relu'))(x)  
+            x = TimeDistributed(Dense(num_hiddens, name='fc_{}'.format(l + 1), activation='relu'))(print_out)  
 
     x = BatchNormalization(axis=-1, momentum=0.99, epsilon=1e-3)(x)
 
